@@ -9,11 +9,32 @@ services:
     ports:
       - "11434:11434"
     restart: always
+    networks:
+      - shared-network
     # deploy:
       # resources:
         # reservations:
           # devices:
             # - capabilities: ["gpu"]  # Enable GPU support
 
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    volumes:
+      - open-webui:/app/backend/data
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+    restart: always
+    ports:
+      - "3001:8080"
+    networks:
+      - shared-network
+
 volumes:
   ollama:
+  open-webui:
+
+
+networks:
+  shared-network:
+    # driver: bridge
